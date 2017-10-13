@@ -1,0 +1,15 @@
+"""Telnet Comms"""
+HOST = '192.168.0.100'
+PORT = 9221
+TIMEOUT = 1
+
+"""Commands"""
+GET_ID = '*IDN?'
+GET_VOLTAGE = 'V1O?'
+GET_CURRENT = 'I1O?'
+SET_VOLTAGE = 'V1 '
+SET_CURRENT_LIMIT = 'I1 '
+IS_ON = 'OP1?'
+TURN_ON = 'OP1 1'
+TURN_OFF = 'OP1 0'
+
