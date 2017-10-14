@@ -87,6 +87,7 @@ class ActionPage(tk.Frame):
 
     def start_ramp(self):
         psu.start_ramp(2,3.9,0.1,0.1)
+        command=lambda: GraphPage.update()
         self.controller.show_frame(GraphPage)
 
 
@@ -101,17 +102,23 @@ class GraphPage(tk.Frame):
         button1.pack()
 
         f = Figure(figsize=(5, 5), dpi=100)
-        a = f.add_subplot(111)
-        self.a = a
-        a.plot([1, 2, 3, 4, 5, 6, 7, 8], [5, 6, 1, 3, 8, 9, 3, 5])
+        self.a = f.add_subplot(111)
+        self.a.plot(list(psu.results.keys()),list(psu.results.values()))
 
-        canvas = FigureCanvasTkAgg(f, self)
-        canvas.show()
-        canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
-        toolbar = NavigationToolbar2TkAgg(canvas, self)
+        self.canvas = FigureCanvasTkAgg(f, self)
+        self.canvas.show()
+        self.canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+
+        toolbar = NavigationToolbar2TkAgg(self.canvas, self)
         toolbar.update()
-        canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self.canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    def update(self):
+        self.a.plot(list(psu.results.keys()), list(psu.results.values()))
+        self.canvas.show()
+        print(psu.results)
+
 
 
 app = PSU_Remote()

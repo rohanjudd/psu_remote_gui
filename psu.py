@@ -78,5 +78,4 @@ class PSU:
                 reading = "0A"
             measured_current = reading[:1]
             self.results[v] = measured_current
-        print(self.results)
         self.send("{} {:.2f}".format(config.SET_VOLTAGE, v))
