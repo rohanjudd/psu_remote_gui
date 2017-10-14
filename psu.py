@@ -1,11 +1,13 @@
 import telnetlib
 import time
+import math
 import config
 import socket
 
 class PSU:
     def __init__(self):
         self.tel = telnetlib.Telnet()
+        self.results = {}
 
     def connect(self):
         try:
@@ -19,27 +21,31 @@ class PSU:
 
     def send(self, message):
         print("sending: {}".format(message))
-        self.tel.write(message.encode())
-        #self.tel.write('/n'.encode())
+        try:
+            self.tel.write(message.encode())
+        except AttributeError:
+            print("Not Connected")
 
     def read(self):
         try:
             return self.tel.read_eager().decode("utf-8").strip()
         except EOFError:
             return "EOFError"
+        except ValueError:
+            return "EMPTY"
 
     def get_id(self):
         self.send(config.GET_ID)
         time.sleep(0.1)
         return self.read()
 
-    def get_voltage(self):
-        self.send(config.GET_VOLTAGE)
+    def read_voltage(self):
+        self.send(config.READ_VOLTAGE)
         time.sleep(0.1)
         return self.read()
 
-    def get_current(self):
-        self.send(config.GET_CURRENT)
+    def read_current(self):
+        self.send(config.READ_CURRENT)
         time.sleep(0.1)
         return self.read()
 
@@ -60,5 +66,17 @@ class PSU:
     def set_current_limit(self, i):
         self.send("{} {:.2f}".format(config.SET_CURRENT_LIMIT, i))
 
-    def start_ramp(self, i):
-        self.send("{} {:.2f}".format(config.SET_CURRENT_LIMIT, i))
+    def start_ramp(self, a, b, i, t):
+        self.turn_on()
+        v = a
+        while v < b:
+            self.set_voltage(v)
+            v += i
+            time.sleep(t)
+            reading = self.read_current()
+            if reading == "EMPTY":
+                reading = "0A"
+            measured_current = reading[:1]
+            self.results[v] = measured_current
+        print(self.results)
+        self.send("{} {:.2f}".format(config.SET_VOLTAGE, v))
