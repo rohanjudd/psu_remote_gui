@@ -30,7 +30,7 @@ def connect():
         print("Not Connected")
 
 def ramp():
-    psu.start_ramp(0, 20, 0.1, 0.02)
+    psu.start_ramp(2.2, 3.8, 0.1, 0.04)
     plt.plot(list(psu.results.keys()), list(psu.results.values()))
     fig.canvas.draw()
 

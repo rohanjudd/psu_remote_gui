@@ -28,7 +28,9 @@ class PSU:
 
     def read(self):
         try:
-            return self.tel.read_eager().decode("utf-8").strip()
+            inp = self.tel.read_eager().decode("utf-8").strip()
+            print(inp)
+            return inp
         except EOFError:
             return "EOFError"
         except ValueError:
@@ -76,6 +78,8 @@ class PSU:
             reading = self.read_current()
             if reading == "EMPTY":
                 reading = "0A"
-            measured_current = reading[:1]
+            print(reading[:-1])
+            measured_current = float(reading[:-1])
+            print(measured_current)
             self.results[v] = measured_current
         self.send("{} {:.2f}".format(config.SET_VOLTAGE, v))
