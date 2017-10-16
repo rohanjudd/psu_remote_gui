@@ -19,7 +19,7 @@ plt.margins(0)
 plt.title("SSR Test")
 plt.xlabel('Voltage(V)')
 plt.ylabel('Current (A)')
-#plt.plot([0],[0])
+#plt.axis([2, 4, 0, 11])
 
 
 canvas = FigureCanvasTkAgg(fig, master=root)
@@ -30,13 +30,18 @@ def connect():
         print("Not Connected")
 
 def ramp():
-    psu.start_ramp(2, 3.9, 0.1, 0.1)
+    psu.start_ramp(0, 20, 0.1, 0.02)
     plt.plot(list(psu.results.keys()), list(psu.results.values()))
     fig.canvas.draw()
+
+def close():
+    psu.disconnect()
+    exit()
 
 plot_widget.pack()
 label = tk.Label(root, text="PSU Remote")
 label.pack(pady=10, padx=10)
 tk.Button(root,text="Connect",command=connect).pack()
 tk.Button(root,text="Ramp",command=ramp).pack()
+tk.Button(root,text="Exit",command=close).pack()
 root.mainloop()
