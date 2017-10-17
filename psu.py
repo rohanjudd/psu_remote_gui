@@ -8,15 +8,20 @@ class PSU:
     def __init__(self):
         self.tel = telnetlib.Telnet()
         self.results = {}
+        self.voltage = 0
+        self.connected = False
 
     def connect(self):
         try:
             self.tel.open(config.HOST, config.PORT, timeout=config.TIMEOUT)
         except socket.timeout:
-            return False
-        return True
+            self.connected = False
+            return self.connected
+        self.connected = True
+        return self.connected
 
     def disconnect(self):
+        self.connected = False
         self.tel.close()
 
     def send(self, message):
@@ -63,6 +68,7 @@ class PSU:
         self.send(config.TURN_OFF)
 
     def set_voltage(self, v):
+        self.voltage = v
         self.send("{} {:.2f}".format(config.SET_VOLTAGE, v))
 
     def set_current_limit(self, i):

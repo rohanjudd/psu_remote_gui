@@ -1,7 +1,7 @@
 """Telnet Comms"""
 HOST = '172.16.0.100'
 PORT = 9221
-TIMEOUT = 1
+TIMEOUT = 0.5
 
 """Commands"""
 READ_ID = '*IDN?'
