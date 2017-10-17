@@ -37,7 +37,7 @@ class PSU:
             return "EMPTY"
 
     def get_id(self):
-        self.send(config.GET_ID)
+        self.send(config.READ_ID)
         time.sleep(0.1)
         return self.read()
 
