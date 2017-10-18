@@ -6,7 +6,7 @@ from psu import PSU
 psu = PSU()
 root = tk.Tk()
 
-root.minsize(width=200, height=200)
+root.minsize(width=160, height=520)
 
 root.iconbitmap('favicon.ico')
 
@@ -15,7 +15,8 @@ lockable_buttons = []
 def connect():
     if not psu.connect():
         show_status("yellow", "PSU Not Found")
-        unlock_buttons()
+        #unlock_buttons()
+        #show_status("light blue", "Connected")
     else:
         turn_off()
         set_voltage(0)
@@ -57,6 +58,7 @@ def reset_to_voltage(v):
 
 
 def delayed_reset():
+    set_voltage(13)
     turn_off()
     show_status("red", "READY")
     root.update()
@@ -75,7 +77,7 @@ def delayed_reset():
 
 def show_connected_status():
     if psu.connected:
-        show_status("blue", "Connected")
+        show_status("light blue", "Connected")
     else:
         show_status("grey", "Not Connected")
 
@@ -113,7 +115,7 @@ def close():
     exit()
 
 
-tk.Label(root, text="CSB PSU Remote").pack(pady=5, padx=20)
+tk.Label(root, text="CSB PSU Remote").pack(pady=5, padx=5)
 
 voltage_indicator = tk.Label(root, text="0V", bg="red", fg="black", font=("Helvetica", 16))
 voltage_indicator.pack(fill=tk.X, pady=5)
@@ -123,34 +125,34 @@ status_indicator.pack(fill=tk.X, pady=5)
 tk.Label(root).pack()
 
 connect_button = tk.Button(root, text="Connect", command=lambda: connect())
-connect_button.pack(fill=tk.X, padx=8)
+connect_button.pack(fill=tk.X, padx=5)
 disconnect_button = tk.Button(root, text="Disconnect", command=lambda: disconnect())
-disconnect_button.pack(fill=tk.X, padx=8)
+disconnect_button.pack(fill=tk.X, padx=5)
 disconnect_button.configure(state=tk.DISABLED)
 tk.Label(root).pack()
 
 on_button = tk.Button(root, text="ON", command=lambda: turn_on())
-on_button.pack(fill=tk.X, padx=8)
+on_button.pack(fill=tk.X, padx=5)
 off_button = tk.Button(root, text="OFF", command=lambda: turn_off())
-off_button.pack(fill=tk.X, padx=8)
+off_button.pack(fill=tk.X, padx=5)
 tk.Label(root).pack()
 
 delayed_reset_button = tk.Button(root, text="Delayed Reset", command=lambda: delayed_reset())
-delayed_reset_button.pack(fill=tk.X, padx=8)
+delayed_reset_button.pack(fill=tk.X, padx=5)
 tk.Label(root).pack()
 
 startup_voltage_test_button = tk.Button(root, text="Startup Voltage Test", command=lambda: startup_voltage_test())
-startup_voltage_test_button.pack(fill=tk.X, padx=8)
+startup_voltage_test_button.pack(fill=tk.X, padx=5)
 tk.Label(root).pack()
 
 six_eight_button = tk.Button(root, text="6.8 V", command=lambda: reset_to_voltage(6.8))
-six_eight_button.pack(fill=tk.X, padx=8)
+six_eight_button.pack(fill=tk.X, padx=5)
 thirteen_button = tk.Button(root, text="13.0 V", command=lambda: reset_to_voltage(13))
-thirteen_button.pack(fill=tk.X, padx=8)
+thirteen_button.pack(fill=tk.X, padx=5)
 eighteen_two_button = tk.Button(root, text="18.2 V", command=lambda: reset_to_voltage(18.2))
-eighteen_two_button.pack(fill=tk.X, padx=8)
+eighteen_two_button.pack(fill=tk.X, padx=5)
 
-tk.Button(root, text="Exit", command=lambda: close()).pack(fill=tk.X, padx=8, pady = 20)
+tk.Button(root, text="Exit", command=lambda: close()).pack(fill=tk.X, padx=5, pady = 20)
 
 lockable_buttons = [disconnect_button, on_button, off_button, delayed_reset_button, startup_voltage_test_button, six_eight_button, thirteen_button, eighteen_two_button]
 lock_buttons()
